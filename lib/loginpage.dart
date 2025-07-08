@@ -57,7 +57,9 @@ class _LoginPageState extends State<LoginPage> {
                   child: const Text('Se connecter'),
                 ),
                 const SizedBox(height: 16),
-                Text(_message, style: TextStyle(color: Colors.red)),
+                Text(_message,
+                    style: TextStyle(
+                        color: const Color.fromARGB(255, 54, 244, 67))),
               ],
             ),
           ),
