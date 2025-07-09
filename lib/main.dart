@@ -22,9 +22,9 @@ class _MyAppState extends State<MyApp> {
     fetchUsers();
   }
 
+  // premiere methode , celle de recuperer les infos des utilisateurs, en utilisant la methode GET
   Future<void> fetchUsers() async {
-    final url =
-        Uri.parse('http://localhost:3000/api/users'); // Pour Android Emulator
+    final url = Uri.parse('http://localhost:3000/api/users');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
@@ -35,6 +35,7 @@ class _MyAppState extends State<MyApp> {
     }
   }
 
+  // Ici, nous permet creer les donnees des utilisateurs sans, en utilisant la methode POST
   Future<void> addUser(String name, String email) async {
     final url = Uri.parse('http://localhost:3000/api/users');
     final response = await http.post(
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
         emailController.clear();
       });
     } else {
-      throw Exception('Échec de l’ajout');
+      throw Exception("Échec de l’ajout");
     }
   }
 

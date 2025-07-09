@@ -8,6 +8,7 @@ app.use(express.json());
 
 let users = [];
 
+// method de recuperation ...
 app.get('/api/users', (req, res) => {
   res.json(users);
 });
