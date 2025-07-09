@@ -24,7 +24,7 @@ class _MyAppState extends State<MyApp> {
 
   Future<void> fetchUsers() async {
     final url =
-        Uri.parse('http://10.0.2.2:3000/api/users'); // Pour Android Emulator
+        Uri.parse('http://localhost:3000/api/users'); // Pour Android Emulator
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
