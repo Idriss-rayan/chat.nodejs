@@ -60,7 +60,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
-        appBar: AppBar(title: Text('Utilisateurs')),
+        appBar: AppBar(title: Text('User')),
         body: Padding(
           padding: EdgeInsets.all(16),
           child: Column(
