@@ -58,13 +58,21 @@ class _ContactfState extends State<Contactf> {
                       url,
                       headers: {'content-type': 'application/json'},
                       body: jsonEncode(
-                        {
-                          'name': name,
-                          'email': email,
-                          'message': message,
-                        },
+                        {'name': name, 'email': email, 'message': message},
                       ),
                     );
+                    if (response.statusCode == 200) {
+                      var json = jsonDecode(response.body);
+                      showDialog(
+                        context: context,
+                        builder: (_) => AlertDialog(
+                          title: Text("Succès"),
+                          content: Text(json['message']),
+                        ),
+                      );
+                    } else {
+                      print("Erreur : ${response.statusCode}");
+                    }
                   },
                   child: Text('send'),
                 ),
