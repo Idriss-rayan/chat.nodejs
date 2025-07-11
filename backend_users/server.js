@@ -5,16 +5,15 @@ const cors = require('cors');
 const app = express();
 app.use(cors())
 app.use(bodyparser.json());
+let lastdata = { name: '', number: '' };
 
 app.post('/', (req, res) => {
     const { name , number } = req.body;
-    console.log('Nom recu: ', name);
-    console.log('Numero recu: ', number);
+    lastdata = { name, number };
 
     res.json({message: 'donnee recu avec success'});
 });
-let lastdata = { name: '', number: '' };
-app.get('/last',(req, res) => {
+app.get('/',(req, res) => {
     res.json(lastdata); // <-- renvoie les donne enregistre
 })
 
