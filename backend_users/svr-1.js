@@ -11,6 +11,8 @@ app.post('/',(req, res) => {
     console.log('son nom est: ',name);
     console.log('son email est: ',email);
     console.log('le message envoyer est: ',message);
+
+      res.json({ status: 'success', message: 'Données reçues avec succès' });
 })
 
 app.listen(3000, ()=> {
