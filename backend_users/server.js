@@ -1,31 +1,19 @@
 const express = require('express');
+const bodyparser = require('body-parser');
 const cors = require('cors');
+
 const app = express();
-const port = 3000;
+app.use(cors())
+app.use(bodyparser.json());
 
-app.use(cors());
-app.use(express.json());
+app.post('/', (req, res) => {
+    const { name , number } = req.body;
+    console.log('Nom recu: ', name);
+    console.log('Numero recu: ', number);
 
-let users = [];
-
-// method de recuperation ...
-app.get('/api/users', (req, res) => {
-    const ray = req.query.name
-    console.log(`le nom recuperer est ${ray}`)
-    //res.json(users);
+    res.json({message: 'donnee recu avec success'});
 });
 
-app.post('/api/users', (req, res) => {
-  const { name, email } = req.body;
-  const newUser = {
-    id: Date.now().toString(),
-    name,
-    email,
-  };
-  users.push(newUser);
-  res.status(201).json(newUser);
-});
-
-app.listen(port, () => {
-  console.log(`✅ Serveur Node.js en ligne sur http://localhost:${port}`);
+app.listen(3000, ()=> {
+    console.log('Serveur demarrer sur le port 3000')
 });
