@@ -35,6 +35,7 @@ class _FormularState extends State<Formular> {
                 String number = _number.text;
 
                 var url = Uri.parse('http://localhost:3000');
+                // ce block permet d'envoyer enfaite le nom et le number
                 var response = await http.post(
                   url,
                   headers: {'content-type': 'application/json'},

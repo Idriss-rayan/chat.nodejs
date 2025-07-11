@@ -21,7 +21,7 @@ class _StorageState extends State<Storage> {
   }
 
   Future<void> fetchData() async {
-    final url = Uri.parse('http://localhost:3000/last');
+    final url = Uri.parse('http://localhost:3000');
     final response = await http.get(url);
 
     if (response.statusCode == 200) {
