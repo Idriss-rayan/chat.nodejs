@@ -10,7 +10,9 @@ let users = [];
 
 // method de recuperation ...
 app.get('/api/users', (req, res) => {
-  res.json(users);
+    const ray = req.query.name
+    console.log(`le nom recuperer est ${ray}`)
+    //res.json(users);
 });
 
 app.post('/api/users', (req, res) => {
