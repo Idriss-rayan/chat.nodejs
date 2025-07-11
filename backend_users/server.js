@@ -13,6 +13,10 @@ app.post('/', (req, res) => {
 
     res.json({message: 'donnee recu avec success'});
 });
+let lastdata = { name: '', number: '' };
+app.get('/last',(req, res) => {
+    res.json(lastdata); // <-- renvoie les donne enregistre
+})
 
 app.listen(3000, ()=> {
     console.log('Serveur demarrer sur le port 3000')

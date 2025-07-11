@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:chat/storage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -47,9 +48,12 @@ class _FormularState extends State<Formular> {
             SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                print('Bouton appuyé');
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const Storage()),
+                );
               },
-              child: Text('voir'),
+              child: Text('Voir'),
             ),
           ],
         ),
