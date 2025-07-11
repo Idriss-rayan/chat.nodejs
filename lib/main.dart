@@ -1,4 +1,5 @@
-import 'package:chat/assign-0/formular.dart';
+//import 'package:chat/assign-0/formular.dart';
+import 'package:chat/assign-1/contactf.dart';
 import 'package:flutter/material.dart';
 
 class MyApp extends StatelessWidget {
@@ -7,7 +8,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Formular(),
+      home: Contactf(),
     );
   }
 }
