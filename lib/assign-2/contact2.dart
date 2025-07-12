@@ -69,7 +69,7 @@ class _Contact2State extends State<Contact2> {
       showDialog(
         context: context,
         builder: (_) => AlertDialog(
-          title: Text('success'),
+          title: Text(json['status']),
           content: Text(json['message']),
         ),
       );
