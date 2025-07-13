@@ -20,9 +20,6 @@ if (existing){
     return res.status(409).json({message: 'message already exist '})
 }
 
-contact.push({ name, id, number });
-  res.status(201).json({ message: 'Contact added successfully' });
-
 app.get('/', (req, res) => {
   res.json(contact); 
 });

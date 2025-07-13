@@ -61,6 +61,8 @@ class _ContactCardState extends State<ContactCard> {
         {'name': name, 'id': id, 'number': number},
       ),
     );
+    _name.clear();
+    _number.clear();
   }
 
   @override
@@ -168,40 +170,90 @@ class _DetailsListState extends State<DetailsList> {
           final contact = contactList[index];
           return Padding(
             padding: const EdgeInsets.all(28.0),
-            child: Container(
-              width: screenWidth * 0.8,
-              height: screenHeight * 0.18,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: const Color.fromARGB(255, 0, 36, 65),
+            child: InkWell(
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => DisplayList(contact: contact),
+                  ),
+                );
+              },
+              child: Container(
+                width: screenWidth * 0.8,
+                height: screenHeight * 0.18,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color.fromARGB(255, 0, 36, 65),
+                  ),
                 ),
-              ),
-              child: Row(
-                children: [
-                  Column(
-                    children: [
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Text('${contact['name']}'),
+                child: Row(
+                  children: [
+                    Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text('${contact['name']}'),
+                        ),
+                        Spacer(),
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 50.0),
+                          child: Text('${contact['id']}'),
+                        ),
+                      ],
+                    ),
+                    Spacer(),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 15.0),
+                      child: InkWell(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => DisplayList(
+                                contact: contact,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Icon(CupertinoIcons.arrow_right),
                       ),
-                      Spacer(),
-                      Padding(
-                        padding: const EdgeInsets.only(bottom: 50.0),
-                        child: Text('${contact['id']}'),
-                      ),
-                    ],
-                  ),
-                  Spacer(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 15.0),
-                    child: Icon(CupertinoIcons.arrow_right),
-                  ),
-                ],
+                    ),
+                  ],
+                ),
               ),
             ),
           );
         },
+      ),
+    );
+  }
+}
+
+class DisplayList extends StatefulWidget {
+  final Map<String, dynamic> contact;
+  DisplayList({super.key, required this.contact});
+
+  @override
+  State<DisplayList> createState() => _DisplayListState();
+}
+
+class _DisplayListState extends State<DisplayList> {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: Text('Contact Info')),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Name: ${widget.contact['name']}'),
+            Text('ID: ${widget.contact['id']}'),
+            Text('Number: ${widget.contact['number']}'),
+          ],
+        ),
       ),
     );
   }
