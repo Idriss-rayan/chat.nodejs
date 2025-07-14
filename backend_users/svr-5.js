@@ -17,14 +17,13 @@ app.post('/users', (req, res) => {
         return res.status(400).json({ message: 'Nom et email requis' });
     }
 
-    const id = uuidv4(); // Crée un id unique
+    const id = uuidv4(); 
     const newUser = { id, name, email };
     contact.push(newUser);
 
-    res.status(201).json(newUser); // On retourne l'utilisateur ajouté
+    res.status(201).json(newUser);
 });
 
-// 📄 GET /users
 app.get('/users', (req, res) => {
     res.json(contact);
 });
