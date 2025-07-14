@@ -109,16 +109,16 @@ class _ContactCardState extends State<ContactCard> {
                   ),
                   SizedBox(width: 12),
                   ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => DetailsList()),
-                        );
-                      },
-                      child: Text('More')),
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => DetailsList()),
+                      );
+                    },
+                    child: Text('More'),
+                  ),
                 ],
-              )
+              ),
             ],
           ),
         ),
