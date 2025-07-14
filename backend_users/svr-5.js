@@ -1,22 +1,34 @@
-const express = require('express')
-const cors = require('cors')
-const bodyparser = require('body-parser')
+const express = require('express');
+const cors = require('cors');
+const bodyparser = require('body-parser');
+const { v4: uuidv4 } = require('uuid');
 
-app = express();
+const app = express();
 app.use(cors());
 app.use(bodyparser.json());
 
 let contact = [];
 
-app.post('/users', (req,res)=>{
-    const {id , name , email} = req.body;
-    contact.push({id,name,email});
-})
+// ➕ POST /users
+app.post('/users', (req, res) => {
+    const { name, email } = req.body;
 
-app.get('/users',(req,res)=>{
+    if (!name || !email) {
+        return res.status(400).json({ message: 'Nom et email requis' });
+    }
+
+    const id = uuidv4(); // Crée un id unique
+    const newUser = { id, name, email };
+    contact.push(newUser);
+
+    res.status(201).json(newUser); // On retourne l'utilisateur ajouté
+});
+
+// 📄 GET /users
+app.get('/users', (req, res) => {
     res.json(contact);
-})
+});
 
-app.listen(3000, ()=>{
-    console.log('listen on port 3000 ...');
-})
+app.listen(3000, () => {
+    console.log('✅ Server listening on port 3000...');
+});

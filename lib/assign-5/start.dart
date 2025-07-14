@@ -14,90 +14,97 @@ List<Map<String, dynamic>> infos = [];
 class _StartState extends State<Start> {
   TextEditingController _name = TextEditingController();
   TextEditingController _email = TextEditingController();
-  bool IsValidated = false;
+  bool isValidated = false;
 
-  void _CondValid() {
-    IsValidated = _name.text.isNotEmpty;
+  void _condValid() {
+    setState(() {
+      isValidated = _name.text.isNotEmpty && _email.text.isNotEmpty;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    _name.addListener(_condValid);
+    _email.addListener(_condValid);
   }
 
   @override
   void dispose() {
     _name.dispose();
     _email.dispose();
+    super.dispose();
   }
 
-  @override
-  void iniState() {
-    super.initState();
-    _name.addListener(_CondValid);
-    _email.addListener(_CondValid);
-  }
-
-  Future<void> PostUsers() async {
+  Future<void> postUsers() async {
     String name = _name.text;
     String email = _email.text;
-    String id = '';
-    final url = Uri.parse('http://localhost:3000/user');
+
+    final url = Uri.parse('http://localhost:3000/users');
     var response = await http.post(
       url,
-      headers: {'content-type': 'application/json'},
-      body: jsonEncode(
-        {'id': id, 'name': name, 'email': email},
-      ),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'name': name, 'email': email}),
     );
+
+    if (response.statusCode == 201) {
+      _name.clear();
+      _email.clear();
+      setState(() {
+        isValidated = false;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        children: [
-          Form(
-            child: Column(
-              children: [
-                TextFormField(
-                  controller: _name,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'ente the name';
-                    }
-                    return null;
-                  },
-                ),
-                TextFormField(
-                  controller: _email,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'ente the mail';
-                    }
-                    return null;
-                  },
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    ElevatedButton(
-                      onPressed: IsValidated ? PostUsers : null,
-                      child: Text('send'),
-                    ),
-                    SizedBox(height: 20),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => Storecont(info: infos),
-                          ),
-                        );
-                      },
-                      child: Text('see'),
-                    ),
-                  ],
-                )
-              ],
+      body: Padding(
+        padding: const EdgeInsets.all(20),
+        child: Column(
+          children: [
+            Form(
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: _name,
+                    decoration: InputDecoration(labelText: 'Nom'),
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Entrer le nom' : null,
+                  ),
+                  TextFormField(
+                    controller: _email,
+                    decoration: InputDecoration(labelText: 'Email'),
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Entrer l\'email'
+                        : null,
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      ElevatedButton(
+                        onPressed: isValidated ? postUsers : null,
+                        child: Text('Envoyer'),
+                      ),
+                      SizedBox(width: 20),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => Storecont(info: infos),
+                            ),
+                          );
+                        },
+                        child: Text('Voir les utilisateurs'),
+                      ),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -113,6 +120,7 @@ class Storecont extends StatefulWidget {
 
 class _StorecontState extends State<Storecont> {
   bool isLoading = true;
+
   Future<void> getInfos() async {
     final url = Uri.parse('http://localhost:3000/users');
     var response = await http.get(url);
@@ -123,37 +131,49 @@ class _StorecontState extends State<Storecont> {
         isLoading = false;
       });
     } else {
-      infos = [];
-      isLoading = false;
+      setState(() {
+        infos = [];
+        isLoading = false;
+      });
     }
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    getInfos();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView.builder(
-          itemCount: infos.length,
-          itemBuilder: (context, index) {
-            final info = infos[index];
-            return Padding(
-              padding: const EdgeInsets.all(28.0),
-              child: Container(
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(15),
-                  border: Border.all(color: Colors.black),
-                ),
-                width: double.infinity,
-                height: 200,
-                child: Column(
-                  children: [
-                    Text('${info['id']}'),
-                    Text('${info['name']}'),
-                    Text('${info['email']}'),
-                  ],
-                ),
-              ),
-            );
-          }),
+      appBar: AppBar(title: Text('Utilisateurs')),
+      body: isLoading
+          ? Center(child: CircularProgressIndicator())
+          : ListView.builder(
+              itemCount: infos.length,
+              itemBuilder: (context, index) {
+                final info = infos[index];
+                return Padding(
+                  padding: const EdgeInsets.all(12.0),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(15),
+                      border: Border.all(color: Colors.black),
+                    ),
+                    padding: EdgeInsets.all(12),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text('ID: ${info['id']}'),
+                        Text('Nom: ${info['name']}'),
+                        Text('Email: ${info['email']}'),
+                      ],
+                    ),
+                  ),
+                );
+              },
+            ),
     );
   }
 }
