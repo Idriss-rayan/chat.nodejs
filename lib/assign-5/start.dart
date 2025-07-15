@@ -110,6 +110,7 @@ class _StartState extends State<Start> {
   }
 }
 
+///////////////////// second page ... ////////////////////////////////////////
 class Storecont extends StatefulWidget {
   final List<Map<String, dynamic>> info;
   const Storecont({super.key, required this.info});
@@ -119,7 +120,33 @@ class Storecont extends StatefulWidget {
 }
 
 class _StorecontState extends State<Storecont> {
+  TextEditingController searchController = TextEditingController();
   bool isLoading = true;
+  List<Map<String, dynamic>> filteredItems = [];
+
+  @override
+  void initState() {
+    super.initState();
+    getInfos();
+    searchController.addListener(_filterItems);
+  }
+
+  void _filterItems() {
+    final query = searchController.text.toLowerCase();
+    setState(() {
+      filteredItems = infos.where((item) {
+        final name = item['name']?.toLowerCase() ?? '';
+        final email = item['email']?.toLowerCase() ?? '';
+        return name.contains(query) || email.contains(query);
+      }).toList();
+    });
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   Future<void> getInfos() async {
     final url = Uri.parse('http://localhost:3000/users');
@@ -128,45 +155,61 @@ class _StorecontState extends State<Storecont> {
       final data = jsonDecode(response.body);
       setState(() {
         infos = List<Map<String, dynamic>>.from(data);
+        filteredItems = infos;
         isLoading = false;
       });
     } else {
       setState(() {
         infos = [];
+        filteredItems = [];
         isLoading = false;
       });
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    getInfos();
+  Future<void> DeleteUser(String id) async {
+    final url = Uri.parse('http://localhost:3000/users/$id');
+    final response = await http.delete(url);
+
+    if (response.statusCode == 200) {
+      print('users deleted');
+      await getInfos();
+      _filterItems();
+    } else {
+      print('error!');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: Row(
-        children: [
-          Text('Utilisateurs'),
-          Spacer(),
-          InkWell(
-            onTap: () {},
-            child: Icon(Icons.search),
-          ),
-          Padding(
-            padding: EdgeInsets.only(right: 20),
-          )
-        ],
-      )),
+        title: Row(
+          children: [
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextField(
+                  controller: searchController,
+                  decoration: InputDecoration(
+                    hintText: 'Rechercher...',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Icon(Icons.search),
+          ],
+        ),
+      ),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
-              itemCount: infos.length,
+              itemCount: filteredItems.length,
               itemBuilder: (context, index) {
-                final info = infos[index];
+                final info = filteredItems[index];
                 return Padding(
                   padding: const EdgeInsets.all(12.0),
                   child: Container(
@@ -175,12 +218,23 @@ class _StorecontState extends State<Storecont> {
                       border: Border.all(color: Colors.black),
                     ),
                     padding: EdgeInsets.all(12),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    child: Row(
                       children: [
-                        Text('ID: ${info['id']}'),
-                        Text('Nom: ${info['name']}'),
-                        Text('Email: ${info['email']}'),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('ID: ${info['id']}'),
+                            Text('Nom: ${info['name']}'),
+                            Text('Email: ${info['email']}'),
+                          ],
+                        ),
+                        Spacer(),
+                        IconButton(
+                          icon: Icon(Icons.delete, color: Colors.red),
+                          onPressed: () {
+                            DeleteUser(info['id']);
+                          },
+                        ),
                       ],
                     ),
                   ),

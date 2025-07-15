@@ -28,6 +28,19 @@ app.get('/users', (req, res) => {
     res.json(contact);
 });
 
+
+app.delete('/users/:id', (req, res)=>{
+    const id = req.params.id;
+    const index = contact.findIndex(user => user.id === id);
+
+    if (index !== -1){
+        contact.splice(index, 1);
+        res.status(200).json({ message: 'Utilisateur supprime' });
+    } else {
+        res.status(404).json({ message:'Utilisateur introuvable' });
+    }
+});
+
 app.listen(3000, () => {
     console.log('✅ Server listening on port 3000...');
 });
