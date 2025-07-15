@@ -9,7 +9,7 @@ app.use(bodyparser.json());
 
 let contact = [];
 
-// ➕ POST /users
+
 app.post('/users', (req, res) => {
     const { name, email } = req.body;
 

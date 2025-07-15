@@ -243,7 +243,14 @@ class _DisplayListState extends State<DisplayList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Contact Info')),
+      appBar: AppBar(
+          title: Row(
+        children: [
+          Text('Contact Info'),
+          Spacer(),
+          Icon(Icons.search),
+        ],
+      )),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

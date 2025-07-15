@@ -147,7 +147,20 @@ class _StorecontState extends State<Storecont> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Utilisateurs')),
+      appBar: AppBar(
+          title: Row(
+        children: [
+          Text('Utilisateurs'),
+          Spacer(),
+          InkWell(
+            onTap: () {},
+            child: Icon(Icons.search),
+          ),
+          Padding(
+            padding: EdgeInsets.only(right: 20),
+          )
+        ],
+      )),
       body: isLoading
           ? Center(child: CircularProgressIndicator())
           : ListView.builder(
