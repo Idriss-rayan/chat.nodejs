@@ -238,9 +238,8 @@ class _StorecontState extends State<Storecont> {
                                 Icons.edit,
                                 color: const Color.fromARGB(202, 59, 58, 58),
                               ),
-                              onPressed: () {
-                                //DeleteUser(info['id']);
-                                Navigator.push(
+                              onPressed: () async {
+                                final update = await Navigator.push(
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) => EditPage(
@@ -248,6 +247,11 @@ class _StorecontState extends State<Storecont> {
                                     ),
                                   ),
                                 );
+
+                                if (update == true) {
+                                  await getInfos();
+                                  _filterItems();
+                                }
                               },
                             ),
                             SizedBox(width: 20),
@@ -285,12 +289,14 @@ class _EditPageState extends State<EditPage> {
   Future<void> PutUser() async {
     String name = _editname.text;
     String email = _editemail.text;
-    final url = Uri.parse('http://localhost:3000/users/$id');
+    final url = Uri.parse('http://localhost:3000/users/${widget.id}');
 
     var response = await http.put(
       url,
-      headers: {'content-type': 'application/json'},
-      body: (
+      headers: {
+        'content-Type': 'application/json',
+      },
+      body: jsonEncode(
         {
           'name': name,
           'email': email,
@@ -299,6 +305,7 @@ class _EditPageState extends State<EditPage> {
     );
     if (response.statusCode == 200) {
       print('user modified with success');
+      Navigator.pop(context, true);
     } else {
       print("user don't modified");
     }
@@ -311,15 +318,17 @@ class _EditPageState extends State<EditPage> {
         children: [
           TextField(
             controller: _editname,
+            decoration: InputDecoration(labelText: 'Nom'),
           ),
           TextField(
             controller: _editemail,
+            decoration: InputDecoration(labelText: 'Email'),
           ),
           SizedBox(
             height: 20,
           ),
           TextButton(
-            onPressed: () {},
+            onPressed: PutUser,
             child: Text(
               'Validated',
               style: TextStyle(
