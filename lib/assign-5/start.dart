@@ -205,7 +205,9 @@ class _StorecontState extends State<Storecont> {
         ),
       ),
       body: isLoading
-          ? Center(child: CircularProgressIndicator())
+          ? Center(
+              child: CircularProgressIndicator(),
+            )
           : ListView.builder(
               itemCount: filteredItems.length,
               itemBuilder: (context, index) {
@@ -229,11 +231,34 @@ class _StorecontState extends State<Storecont> {
                           ],
                         ),
                         Spacer(),
-                        IconButton(
-                          icon: Icon(Icons.delete, color: Colors.red),
-                          onPressed: () {
-                            DeleteUser(info['id']);
-                          },
+                        Row(
+                          children: [
+                            IconButton(
+                              icon: Icon(
+                                Icons.edit,
+                                color: const Color.fromARGB(202, 59, 58, 58),
+                              ),
+                              onPressed: () {
+                                //DeleteUser(info['id']);
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => EditPage(
+                                      id: '${info['id']}',
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
+                            SizedBox(width: 20),
+                            IconButton(
+                              icon: Icon(Icons.delete, color: Colors.red),
+                              onPressed: () {
+                                DeleteUser(info['id']);
+                                // je gache mon potentiel ici a iut ....
+                              },
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -241,6 +266,46 @@ class _StorecontState extends State<Storecont> {
                 );
               },
             ),
+    );
+  }
+}
+
+class EditPage extends StatefulWidget {
+  final String id;
+  const EditPage({super.key, required this.id});
+
+  @override
+  State<EditPage> createState() => _EditPageState();
+}
+
+class _EditPageState extends State<EditPage> {
+  TextEditingController _editname = TextEditingController();
+  TextEditingController _editemail = TextEditingController();
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Column(
+        children: [
+          TextField(
+            controller: _editname,
+          ),
+          TextField(
+            controller: _editemail,
+          ),
+          SizedBox(
+            height: 20,
+          ),
+          TextButton(
+            onPressed: () {},
+            child: Text(
+              'Validated',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
