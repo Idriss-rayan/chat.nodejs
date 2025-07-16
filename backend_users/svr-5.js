@@ -41,6 +41,20 @@ app.delete('/users/:id', (req, res)=>{
     }
 });
 
+app.put('/users/:id', (req, res) => {
+  const userId = req.params.id;
+  const { name, email } = req.body;
+
+  const index = contact.findIndex(user => user.id === userId);
+  if (index !== -1) {
+    contact[index] = { ...contact[index], name, email };
+    res.status(200).json({ message: 'User updated', user: contact[index] });
+  } else {
+    res.status(404).json({ message: 'User not found' });
+  }
+});
+
+
 app.listen(3000, () => {
     console.log('✅ Server listening on port 3000...');
 });
