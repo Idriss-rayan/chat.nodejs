@@ -281,6 +281,29 @@ class EditPage extends StatefulWidget {
 class _EditPageState extends State<EditPage> {
   TextEditingController _editname = TextEditingController();
   TextEditingController _editemail = TextEditingController();
+
+  Future<void> PutUser() async {
+    String name = _editname.text;
+    String email = _editemail.text;
+    final url = Uri.parse('http://localhost:3000/users/$id');
+
+    var response = await http.put(
+      url,
+      headers: {'content-type': 'application/json'},
+      body: (
+        {
+          'name': name,
+          'email': email,
+        },
+      ),
+    );
+    if (response.statusCode == 200) {
+      print('user modified with success');
+    } else {
+      print("user don't modified");
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
