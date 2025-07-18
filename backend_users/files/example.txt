@@ -1,2 +1,1 @@
-as salamouAleykoum, je m'appelle njutapmvoui idriss rayan... 
-je suis un camerounais.
+ceci est mon premier fichier lu avec node.js
