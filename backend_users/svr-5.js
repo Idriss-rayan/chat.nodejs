@@ -21,7 +21,7 @@ app.use((err, req, res, next) => {
 
   res.status(err.status || 500).json({
     error: true,
-    message: err.message || 'Erreur interne du serveur',
+    message: err.message || 'Er serveur',
   });
 });
 
