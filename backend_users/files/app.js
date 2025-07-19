@@ -1,10 +1,14 @@
-const fs = require('fs')
+const path = require('path');
+const fs = require ('fs');
 
-fs.readFile('example.txt','utf8', (err , data) => {
-    if (err) {
-        console.error('error: ', err);
-        return;
-    }
-    console.log('message is: ', data);
+const chemin = path.join(__dirname , 'docs' , 'document.txt');
+console.log(chemin);
+
+fs.readFile(chemin , 'utf8', (err , data)=>{
+    if (err) throw err;
+    console.log('le text est: ', data);
 });
 
+console.log('le nom :', path.basename(chemin));
+console.log('le parent :', path.dirname(chemin));
+console.log('le extension :', path.extname(chemin));
