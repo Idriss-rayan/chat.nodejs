@@ -81,10 +81,10 @@ app.delete('/delete/:filename', (req, res) => {
         if(err) return res.status(500).json({ error: 'erreure de suppression de fichiers ou fichier introuvable'});
     });
 
-    res.json({messgae: `Fichier '${filename}' supprimer.`});
+    res.json({message: `Fichier '${filename}' supprimer.`});
 });
 
 // 🚀 Lancer le serveur
 app.listen(PORT, () => {
-    console.log(`✅ Serveur en écoute sur http://localhost:${PORT}`);
+    console.log(`Serveur sur http://localhost:${PORT}`);
 });
