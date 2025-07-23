@@ -14,8 +14,9 @@ server.on('connection', (ws) => {
   ws.send(`${greeting}, bienvenue sur le serveur WebSocket`);
 
   ws.on('message', (message) => {
-    console.log('Message reçu :', message.toString());
-    ws.send(`Reçu : ${message}`);
+  const name = message.toString();
+  const response = `Bonjour ${name}, content de te voir ici`;
+  ws.send(response);
   });
 
   ws.on('close', () => {
